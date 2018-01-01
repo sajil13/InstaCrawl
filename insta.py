@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
-import requests , shutil , os , re
+import requests
+import shutil
+import os
+import re
 
 username = input("Enter the user name of the Instagram account holder: ")
 res = requests.get("https://www.instagram.com/" + username)
@@ -15,7 +18,6 @@ for i in img_url:
     img = requests.get(i , stream=True)
     data = img.raw
     with open("Insta" + os.sep + str(pic) + ".jpg", 'wb') as insta_file:
-        shutil.copyfileobj(r.raw, insta_file)
+        shutil.copyfileobj(img.raw, insta_file)
         pic+=1
-    del r
-
+    del img    
