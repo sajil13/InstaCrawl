@@ -1,10 +1,8 @@
 from bs4 import BeautifulSoup
-import requests
-import shutil
-import os
-import re
+import requests , shutil , os , re
 
 username = input("Enter the user name of the Instagram account holder: ")
+filename = input("Enter the filename to put your images in: ")
 res = requests.get("https://www.instagram.com/" + username)
 
 htmlsoup = BeautifulSoup(res.text,'html.parser')
@@ -13,11 +11,13 @@ pat = r'"display_src": "(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0
 
 img_url = re.findall(pat,str(htmlsoup))
 pic = 0
+os.mkdir(filename)
 for i in img_url:
     
     img = requests.get(i , stream=True)
     data = img.raw
-    with open("Insta" + os.sep + str(pic) + ".jpg", 'wb') as insta_file:
+    with open(filename + os.sep + str(pic) + ".jpg", 'wb') as insta_file:
         shutil.copyfileobj(img.raw, insta_file)
         pic+=1
-    del img    
+    del img
+
