@@ -3,17 +3,19 @@ import requests , shutil , os , re , time
 
 username = input("Instagram Username : ")
 filename = input("Filename to put your images in: ")
-noofpages = int(input("Number pages you want NOTE: 1 Page = 12 Images: "))
+noofpages = int(input("Number of pages you want NOTE: 1 Page = 12 Images: "))
 res = requests.get("https://www.instagram.com/" +username)
+
 htmlsoup = BeautifulSoup(res.text,'html.parser')
 
 
 def images(mid = ''):
-    res_i = requests.get("https://www.instagram.com/" + username+mid)
-    global htmlsoup_i
-    htmlsoup_i = BeautifulSoup(res_i.text,'html.parser')
+    global res
+    res = requests.get("https://www.instagram.com/" + username+mid)
+    global htmlsoup
+    htmlsoup = BeautifulSoup(res.text,'html.parser')
     pat = r'"display_src": "(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+.jpg)"'
-    img_url = re.findall(pat,str(htmlsoup_i))
+    img_url = re.findall(pat,str(htmlsoup))
     if(os.path.exists(filename)):
         pass
     else:
@@ -37,7 +39,7 @@ if noofpages in range(1,int(pages)+1):
         else:
             
             pat1 = r'"GraphImage", "id": "(\d*)"'
-            maxid = re.findall(pat1,str(htmlsoup_i))
+            maxid = re.findall(pat1,str(htmlsoup))
             
             new_url = "/?max_id="+maxid[len(maxid)-1]
             images(new_url)
